@@ -7,6 +7,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -30,9 +32,17 @@ public class DocumentoServicio {
 
     public String guardarImagen(MultipartFile file) throws IOException {
         Path rutaImagen = this.carpetaImagenes.resolve(Objects.requireNonNull(file.getOriginalFilename()));
-        Files.copy(file.getInputStream(), rutaImagen);
 
-        return rutaImagen.toString();
+        if(!Files.exists(rutaImagen)){
+            Files.copy(file.getInputStream(), rutaImagen);
+        }
+
+        String rutaRelativa = rutaImagen.toString().replace("\\", "/");
+
+        String rutaCompleta = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/" + UriUtils.encodePath(rutaRelativa, "UTF-8")).toUriString();
+
+        return rutaCompleta;
     }
 
     public Resource mostrarImagen(String nombreImagen) throws MalformedURLException {
@@ -40,7 +50,6 @@ public class DocumentoServicio {
 
         return new UrlResource(rutaImagen.toUri());
     }
-
     public List<Documento> obtenerDocumentos() {
         return documentoRepository.findAll();
     }
@@ -52,7 +61,7 @@ public class DocumentoServicio {
     public Documento actualizarDocumento(Long id, Documento documentoCambiado) {
         Optional<Documento> documento = documentoRepository.findById(id);
 
-        if(!documento.isPresent()){
+        if(documento.isEmpty()){
             throw new IllegalArgumentException("No se encontro el documento a actualizar");
         }
 
