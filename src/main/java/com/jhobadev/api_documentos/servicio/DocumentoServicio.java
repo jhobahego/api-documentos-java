@@ -51,7 +51,14 @@ public class DocumentoServicio {
         return new UrlResource(rutaImagen.toUri());
     }
 
+    public Documento guardarDocumento(Documento documento, MultipartFile file) throws IOException {
 
+        // Guarda el archivo y retorna la ruta donde se guarda
+        String urlImagen = guardarImagen(file);
+        documento.setImagen(urlImagen);
+
+        return documentoRepository.save(documento);
+    }
 
     public List<Documento> obtenerDocumentos() {
         return documentoRepository.findAll();
