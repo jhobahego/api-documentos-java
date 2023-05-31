@@ -5,6 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "documento")
 public class Documento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -12,7 +13,7 @@ public class Documento {
     private Long documento_id;
 
     @Column(name = "tipo_documento", nullable = false)
-    TipoDocumento tipoDocumento;
+    String tipoDocumento;
 
     @Column(name = "autor", nullable = false)
     String autor;
@@ -27,7 +28,7 @@ public class Documento {
     String imagen;
 
     @Column(name = "categoria", nullable = false)
-    Categoria categoria;
+    String categoria;
 
     @Column(name = "stock", nullable = false)
     int stock;
