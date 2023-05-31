@@ -50,6 +50,9 @@ public class DocumentoServicio {
 
         return new UrlResource(rutaImagen.toUri());
     }
+
+
+
     public List<Documento> obtenerDocumentos() {
         return documentoRepository.findAll();
     }
@@ -82,6 +85,12 @@ public class DocumentoServicio {
     }
 
     public void eliminarDocumento(Long id) {
+        Optional<Documento> documento = obtenerDocumentoPorId(id);
+
+        if(documento.isEmpty()){
+            throw new IllegalArgumentException("documento con id: " + id + "no encontrado");
+        }
+
         documentoRepository.deleteById(id);
     }
 }
