@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriUtils;
@@ -68,7 +69,7 @@ public class DocumentoServicio {
         return documentoRepository.findById(documentoId);
     }
 
-    public Documento actualizarDocumento(Long id, Documento documentoCambiado) {
+    public Documento actualizarStock(Long id, int stock) {
         Optional<Documento> documento = documentoRepository.findById(id);
 
         if(documento.isEmpty()){
@@ -76,17 +77,7 @@ public class DocumentoServicio {
         }
 
         Documento doc = documento.get();
-        doc.setTipoDocumento(documentoCambiado.getTipoDocumento());
-        doc.setAutor(documentoCambiado.getAutor());
-        doc.setTitulo(documentoCambiado.getTitulo());
-        doc.setDescripcion(documentoCambiado.getDescripcion());
-        doc.setCategoria(documentoCambiado.getCategoria());
-        doc.setStock(documentoCambiado.getStock());
-        doc.setPrecio(documentoCambiado.getPrecio());
-        doc.setImagen(documentoCambiado.getImagen());
-        doc.setEditorial(documentoCambiado.getEditorial());
-        doc.setIdioma(documentoCambiado.getIdioma());
-        doc.setPaginas(documentoCambiado.getPaginas());
+        doc.setStock(stock);
 
         return documentoRepository.save(doc);
     }

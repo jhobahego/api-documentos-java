@@ -51,16 +51,15 @@ public class DocumentoApi {
         return ResponseEntity.status(HttpStatus.CREATED).body(documento);
     }
 
-    // TODO: ruta para actualizar documento
-//    @PutMapping(value = "/documentos/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-//    public ResponseEntity<?> actualizarDocumento(@PathVariable("id") Long id, @ModelAttribute DocumentoDto documento) {
-//        try{
-//            Documento documentoActualizado = documentoServicio.actualizarDocumento(id, documento);
-//            return ResponseEntity.ok().body(documentoActualizado);
-//        } catch (IllegalArgumentException e) {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
+    @PutMapping(value = "/documentos/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<?> actualizarStock(@PathVariable("id") Long id, @RequestParam("stock") int stock) {
+        try{
+            Documento documentoActualizado = documentoServicio.actualizarStock(id, stock);
+            return ResponseEntity.ok().body(documentoActualizado);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
     @DeleteMapping(value = "/documentos/{id}")
     public ResponseEntity<?> eliminarDocumento(@PathVariable("id") Long id) {
