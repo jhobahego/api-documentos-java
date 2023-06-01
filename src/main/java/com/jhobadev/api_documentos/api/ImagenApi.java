@@ -3,6 +3,7 @@ package com.jhobadev.api_documentos.api;
 import com.jhobadev.api_documentos.servicio.DocumentoServicio;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +25,7 @@ public class ImagenApi {
     }
 
     @GetMapping("/imagenes/{imagen}")
-    public ResponseEntity<Resource> mostrarImagen(@PathVariable("imagen") String imagen) {
+    public ResponseEntity<?> mostrarImagen(@PathVariable("imagen") String imagen) {
         try {
             Resource resource = documentoServicio.mostrarImagen(imagen);
 
@@ -36,7 +37,7 @@ public class ImagenApi {
                     .contentType(MediaType.parseMediaType(contentType))
                     .body(resource);
         } catch (MalformedURLException e) {
-            return ResponseEntity.notFound().build(); // Devuelve una respuesta 400 Bad Request en caso de URL inválida
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ruta equivocada"); // Devuelve una respuesta 400 Bad Request en caso de URL inválida
         }
     }
 
