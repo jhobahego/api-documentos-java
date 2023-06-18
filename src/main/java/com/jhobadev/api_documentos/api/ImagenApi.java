@@ -25,20 +25,16 @@ public class ImagenApi {
     }
 
     @GetMapping("/imagenes/{imagen}")
-    public ResponseEntity<?> mostrarImagen(@PathVariable("imagen") String imagen) {
-        try {
-            Resource resource = documentoServicio.mostrarImagen(imagen);
+    public ResponseEntity<?> mostrarImagen(@PathVariable("imagen") String imagen) throws MalformedURLException {
+        Resource resource = documentoServicio.mostrarImagen(imagen);
 
-            boolean esJpgOPng = imagen.toLowerCase().endsWith(".jpg") || imagen.toLowerCase().endsWith(".jpeg");
-            String contentType = esJpgOPng ? MediaType.IMAGE_JPEG_VALUE
-                    : MediaType.IMAGE_PNG_VALUE;
+        boolean esJpgOPng = imagen.toLowerCase().endsWith(".jpg") || imagen.toLowerCase().endsWith(".jpeg");
+        String contentType = esJpgOPng ? MediaType.IMAGE_JPEG_VALUE
+                : MediaType.IMAGE_PNG_VALUE;
 
-            return ResponseEntity.ok()
-                    .contentType(MediaType.parseMediaType(contentType))
-                    .body(resource);
-        } catch (MalformedURLException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Ruta equivocada"); // Devuelve una respuesta 400 Bad Request en caso de URL inválida
-        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
     }
 
 }
