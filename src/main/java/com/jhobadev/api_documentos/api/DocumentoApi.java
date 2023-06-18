@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -41,7 +42,11 @@ public class DocumentoApi {
     }
 
     @PostMapping(value = "/documentos", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Documento> guardarDocumento(@ModelAttribute Documento documento, @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> guardarDocumento(@ModelAttribute Documento documento, @RequestParam("file") MultipartFile file) {
+        if(file.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Debes seleccionar una imagen");
+        }
+
         try {
             documentoServicio.guardarDocumento(documento, file);
         } catch (IOException e) {
